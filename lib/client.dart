@@ -15,14 +15,14 @@ class YTClient {
       clientName: config.clientName,
       clientVersion: config.clientVersion,
     );
-    ytmParams ='?alt=json&key=${config.apiKey}';
+    ytmParams = '?alt=json&key=${config.apiKey}';
   }
 
   Map<String, String> headers = {};
   Map<String, dynamic> context = {};
   int? signatureTimestamp;
   YTConfig config;
-  static  String ytmParams='';
+  static String ytmParams = '';
 
   static const ytmDomain = 'music.youtube.com';
   static const httpsYtmDomain = 'https://music.youtube.com';
@@ -59,6 +59,24 @@ class YTClient {
       // ytcfg['INNERTUBE_API_VERSION'] eg -> v1
     }
     return null;
+  }
+
+  void updateConfig({
+    String? visitorData,
+    String? language,
+    String? location,
+    String? apiKey,
+    String? clientName,
+    String? clientVersion,
+  }) {
+    config = YTConfig(
+      visitorData: visitorData?? config.visitorData,
+      language: language?? config.language,
+      location: location?? config.location,
+      apiKey: apiKey?? config.apiKey,
+      clientName: clientName?? config.clientName,
+      clientVersion: clientVersion?? config.clientVersion,
+    );
   }
 
   Future<Response> sendGetRequest(
@@ -111,11 +129,9 @@ class YTClient {
     Map<String, String>? headers,
     String additionalParams = '',
   }) async {
-
     try {
       body = {...body, ...context};
-      headers = {...this.headers,...?headers};
-
+      headers = {...this.headers, ...?headers};
 
       final Uri uri = Uri.parse(
         httpsYtmDomain +
